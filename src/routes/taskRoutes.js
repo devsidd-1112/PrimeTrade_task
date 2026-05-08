@@ -13,13 +13,14 @@ const {
 } = require('../validations/taskValidation');
 const { handleValidationErrors } = require('../middleware/validationMiddleware');
 const { protect } = require('../middleware/authMiddleware');
+const { cache } = require('../middleware/cacheMiddleware');
 
 // All task routes are protected
 router.use(protect);
 
 router
   .route('/')
-  .get(getTasks)
+  .get(cache(300), getTasks) // Cache for 5 minutes
   .post(createTaskValidation, handleValidationErrors, createTask);
 
 router

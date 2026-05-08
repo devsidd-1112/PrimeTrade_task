@@ -1,20 +1,40 @@
+# Dependencies
 node_modules/
+
+# Environment variables (NEVER commit credentials)
 .env
-.DS_Store
+.env.local
+.env.production
+.env.*.local
+
+# Logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+
+# Build outputs
 dist/
 build/
 coverage/
 
-# Prisma
-prisma/migrations/
+# Prisma generated files
+/src/generated/prisma
 
-# Documentation (keep only essential)
+# Documentation (internal/temporary)
 MIGRATION_GUIDE.md
 MIGRATION_COMPLETE.md
 MIGRATION_SUMMARY.txt
@@ -25,8 +45,13 @@ ARCHITECTURE.md
 PHASE1_COMPLETION_CHECKLIST.md
 API_TESTING_GUIDE.md
 QUICK_START.md
+SYSTEM_STATUS.md
+FINAL_SUMMARY.md
 
-# Prisma config (generated)
-prisma.config.ts
+# Temporary files
+*.tmp
+*.temp
+.cache/
 
-/src/generated/prisma
+# Docker (keep docker-compose.yml and Dockerfile)
+.dockerignore

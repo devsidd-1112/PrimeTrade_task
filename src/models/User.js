@@ -10,17 +10,25 @@ class UserModel {
 
   // Compare password
   static async comparePassword(candidatePassword, hashedPassword) {
+    if (!hashedPassword) return false;
     return await bcrypt.compare(candidatePassword, hashedPassword);
   }
 
   // Create user with hashed password
   static async create(data) {
-    const hashedPassword = await this.hashPassword(data.password);
+    // Only hash password if provided (OAuth users may not have password)
+    if (data.password) {
+      const hashedPassword = await this.hashPassword(data.password);
+      return await prisma.user.create({
+        data: {
+          ...data,
+          password: hashedPassword,
+        },
+      });
+    }
+
     return await prisma.user.create({
-      data: {
-        ...data,
-        password: hashedPassword,
-      },
+      data,
     });
   }
 
@@ -47,9 +55,17 @@ class UserModel {
         name: true,
         email: true,
         role: true,
+        authProvider: true,
         createdAt: true,
         updatedAt: true,
       },
+    });
+  }
+
+  // Find user by Google ID
+  static async findByGoogleId(googleId) {
+    return await prisma.user.findUnique({
+      where: { googleId },
     });
   }
 }

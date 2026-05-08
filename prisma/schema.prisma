@@ -27,16 +27,24 @@ enum TaskPriority {
   high
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  role      Role     @default(user)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  tasks     Task[]
+enum AuthProvider {
+  LOCAL
+  GOOGLE
+}
 
+model User {
+  id           Int          @id @default(autoincrement())
+  name         String
+  email        String       @unique
+  password     String?
+  googleId     String?      @unique
+  authProvider AuthProvider @default(LOCAL)
+  role         Role         @default(user)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  tasks        Task[]
+
+  @@index([email])
   @@map("users")
 }
 
@@ -51,5 +59,8 @@ model Task {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
+  @@index([createdById])
+  @@index([status])
+  @@index([priority])
   @@map("tasks")
 }
